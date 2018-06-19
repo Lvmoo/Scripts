@@ -42,4 +42,4 @@
   [1]: https://api.cloudflare.com/
   [2]: http://sc.ftqq.com
   [3]: https://pushbear.ftqq.com/admin/#/
-  [4]: https://wwww.lvmoo.com/931
+  [4]: https://wwww.lvmoo.com/archives/931.html
