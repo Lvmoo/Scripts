@@ -4,7 +4,7 @@
 #	Description: Auto Update DNS Record
 #	Version: 1.0.0
 #	Author: Kay
-#	Blog: https://wwww.lvmoo.com
+#	Blog: https://wwww.lvmoo.com/931
 #=================================================
 function START_INIT() {
   sleep 10
