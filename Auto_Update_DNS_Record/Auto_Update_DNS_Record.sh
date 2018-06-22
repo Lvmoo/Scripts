@@ -2,17 +2,20 @@
 #=================================================
 #	System Required: CentOS/Debian/Ubuntu
 #	Description: Auto Update DNS Record
-#	Version: 1.0.0
+#	Version: 1.1.1
 #	Author: Kay
-#	Blog: https://wwww.lvmoo.com/archives/931.htm
+#	Blog: https://wwww.lvmoo.com/931.love
 #=================================================
+function SET_ENV() {
+  export LANG=zh_CN.UTF-8
+  export domain=lvmoo.com
+  export domain_A=1.1.1.1
+  export backup1_A=2.2.2.2
+  export backup2_A=3.3.3.3
+  START_INIT
+}
 function START_INIT() {
   sleep 10
-  export LANG=zh_CN.UTF-8
-  domain=lvmoo.com
-  domain_A=1.1.1.1
-  backup1_A=2.2.2.2
-  backup2_A=3.3.3.3
   server_add=$(ping -c 1 $domain | grep PING | awk '{ print $3 }' | awk -F "[()]" '{ print $2 }')
   echo `date +"%Y-%m-%d %H:%M:%S"` START_INIT 输出 域名当前解析值 $server_add
   if  [ $server_add == $domain_A ]
@@ -47,14 +50,14 @@ TIME_INTERVAL() {
   Interval=`expr $STime - $ETime`
   #echo $Interval
   if  [ "$Interval" -ge "3600" ]; then
-  echo `date +"%Y-%m-%d %H:%M:%S"` TIME_INTERVAL 输出 间隔时间 $Interval 大于等于60分钟
-  echo `date +"%Y-%m-%d %H:%M:%S"` TIME_INTERVAL 输出 调用 UPDATE_DNS_3 中
-  UPDATE_DNS_3
-else
-  echo `date +"%Y-%m-%d %H:%M:%S"` 切换到 $backup2_A 时间`cat ./End_Time`
-  echo `date +"%Y-%m-%d %H:%M:%S"` 切换到 $backup2_A 间隔时间小于60分钟,暂时不做国内线路到国外线路的切换
-  START_INIT
-fi
+    echo `date +"%Y-%m-%d %H:%M:%S"` TIME_INTERVAL 输出 间隔时间 $Interval 大于等于60分钟
+    echo `date +"%Y-%m-%d %H:%M:%S"` TIME_INTERVAL 输出 调用 UPDATE_DNS_3 中
+    UPDATE_DNS_3
+  else
+    echo `date +"%Y-%m-%d %H:%M:%S"` 切换到 $backup2_A 时间`cat ./End_Time`
+    echo `date +"%Y-%m-%d %H:%M:%S"` 切换到 $backup2_A 间隔时间小于60分钟,暂时不做国内线路到国外线路的切换
+    START_INIT
+  fi
 }
 
 function TIME_OUT() {
@@ -67,6 +70,7 @@ function TIME_OUT() {
       let sum++
     fi
     echo `date +"%Y-%m-%d %H:%M:%S"` TIME_OUT 输出server_status $server_status
+    #sleep 2
   done
   echo `date +"%Y-%m-%d %H:%M:%S"` TIME_OUT 输出sum值 $sum
 }
@@ -92,10 +96,11 @@ function UPDATE_DNS_1() {
      -H "Content-Type: application/json" \
      --data '{"type":"A","name":"www.lvmoo.com","content":"2.2.2.2","ttl":1,"proxied":false}'`
     curl https://pushbear.ftqq.com/sub --data 'sendkey=3920-fec0e0ffc173ae055c227f65c3748a08&text='$text3'&desp='$desp3''  --compressed
+    sleep 60
   else
     echo `date +"%Y-%m-%d %H:%M:%S"` UPDATE_DNS_1 输出信息 线路 $domain_A OK 暂时不会切换到 $backup1_A
-    START_INIT
   fi
+  START_INIT
 }
 
 function UPDATE_DNS_2() {
@@ -119,11 +124,12 @@ function UPDATE_DNS_2() {
      -H "Content-Type: application/json" \
      --data '{"type":"A","name":"www.lvmoo.com","content":"3.3.3.3","ttl":1,"proxied":false}'`
     curl https://pushbear.ftqq.com/sub --data 'sendkey=3920-fec0e0ffc173ae055c227f65c3748a08&text='$text3'&desp='$desp3''  --compressed
+    sleep 60
   else
     echo `date +"%Y-%m-%d %H:%M:%S"` UPDATE_DNS_2 输出信息 线路 $backup1_A OK 暂时不会切换到 $backup2_A
     date +"%Y-%m-%d %H:%M:%S" >./End_Time
-    START_INIT
   fi
+  START_INIT
 }
 
 function UPDATE_DNS_3() {
@@ -141,6 +147,7 @@ function UPDATE_DNS_3() {
      -H "Content-Type: application/json" \
      --data '{"type":"A","name":"www.lvmoo.com","content":"1.1.1.1","ttl":1,"proxied":false}'`
   curl https://pushbear.ftqq.com/sub --data 'sendkey=3920-fec0e0ffc173ae055c227f65c3748a08&text='$text2'&desp='$desp2''  --compressed
+  sleep 60
   START_INIT
 }
 
@@ -148,4 +155,4 @@ function QUIT() {
   exit
 }
 
-START_INIT
+SET_ENV
