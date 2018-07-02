@@ -124,10 +124,10 @@ function UPDATE_DNS_2() {
      -H "Content-Type: application/json" \
      --data '{"type":"A","name":"www.lvmoo.com","content":"3.3.3.3","ttl":1,"proxied":false}'`
     curl https://pushbear.ftqq.com/sub --data 'sendkey=3920-fec0e0ffc173ae055c227f65c3748a08&text='$text3'&desp='$desp3''  --compressed
+    date +"%Y-%m-%d %H:%M:%S" >./End_Time
     sleep 60
   else
     echo `date +"%Y-%m-%d %H:%M:%S"` UPDATE_DNS_2 输出信息 线路 $backup1_A OK 暂时不会切换到 $backup2_A
-    date +"%Y-%m-%d %H:%M:%S" >./End_Time
   fi
   START_INIT
 }
