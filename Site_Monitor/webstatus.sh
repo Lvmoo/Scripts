@@ -4,7 +4,7 @@
 #	Description: site monitor
 #	Version: 1.0.1
 #	Author: Kay
-#	Blog: https://wwww.lvmoo.com/xxx.love
+#	Blog: https://wwww.lvmoo.com/950.love
 #=================================================
 function set_env() {
 time_out=9
